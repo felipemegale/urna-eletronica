@@ -14,32 +14,33 @@ public class Client {
             System.out.println(" -C- Detalhes conexao :" + sockCli.toString()); //DETALHAMENTO (EXTRA)
             
             //CRIA UM PACOTE DE SAIDA PARA ENVIAR MENSAGENS, ASSOCIANDO-O A CONEXAO (c)
-            // ObjectOutputStream sCliOut = new ObjectOutputStream(socktCli.getOutputStream());
-            // sCliOut.writeObject("MENSAGEM TESTE");//ESCREVE NO PACOTE
-            // System.out.println(" -C- Enviando mensagem...");
-            // sCliOut.flush(); //ENVIA O PACOTE
+            ObjectOutputStream sCliOut = new ObjectOutputStream(sockCli.getOutputStream());
+            for (int i = 0; i < 10; i++) {
+                sCliOut.writeObject("MENSAGEM TESTE numero " + i);//ESCREVE NO PACOTE
+                System.out.println(" -C- Enviando mensagem...");
+                sCliOut.flush(); //ENVIA O PACOTE
+                Thread.sleep(1500);
+            }
             
             //CRIA UM PACOTE DE ENTRADA PARA RECEBER MENSAGENS, ASSOCIADO A CONEXAO (c)
-            ObjectInputStream sCliIn = new ObjectInputStream (sockCli.getInputStream());
-            System.out.println(" -C- Recebendo mensagem...");
-
-            try
-            {
-                while (!sockCli.isClosed())
-                {
-                    String strMsg = sCliIn.readObject().toString(); //ESPERA (BLOQUEADO) POR UM PACOTE
-                    //PROCESSA O PACOTE RECEBIDO
-                    System.out.println(" -C- Mensagem recebida: " + strMsg);
-                }
-            }
-            catch (EOFException eofe)
-            {
-                //FINALIZA A CONEXAO
-                sockCli.close();
-                System.out.println(" -C- Conexao finalizada...");
-                //eofe.printStackTrace();
-            }
-            
+            // ObjectInputStream sCliIn = new ObjectInputStream (sockCli.getInputStream());
+            // System.out.println(" -C- Recebendo mensagem...");
+            // try
+            // {
+            //     while (!sockCli.isClosed())
+            //     {
+            //         String strMsg = sCliIn.readObject().toString(); //ESPERA (BLOQUEADO) POR UM PACOTE
+            //         //PROCESSA O PACOTE RECEBIDO
+            //         System.out.println(" -C- Mensagem recebida: " + strMsg);
+            //     }
+            // }
+            // catch (EOFException eofe)
+            // {
+            //     //FINALIZA A CONEXAO
+            //     sockCli.close();
+            //     System.out.println(" -C- Conexao finalizada...");
+            //     // eofe.printStackTrace();
+            // }
             
         } catch(Exception e) {
             System.out.println(" -C- O seguinte problema ocorreu : \n" + e.toString());

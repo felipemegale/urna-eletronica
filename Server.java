@@ -35,24 +35,45 @@ public class Server extends Thread
     {
         try
         {
-            ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-
-            for (int i = 10; i >= 0; i--)
+            try
             {
-                oos.writeObject(i + " bottles of beer on the wall");
-                oos.flush();
-                Thread.sleep(1000);
+                ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
+                String data;
+    
+                while (true)
+                {
+                    data = ois.readObject().toString();
+                    System.out.println(data + " received from Thread " + this.getId());
+                }
             }
-
-            clientSocket.close();
-        } 
+            catch (Exception e)
+            {
+                clientSocket.close();
+                System.out.println(" -S- Conexao finalizada - Thread " + this.getId());
+                // e.printStackTrace();
+            }
+        }
         catch (IOException ioe)
         {
             ioe.printStackTrace();
         }
-        catch (InterruptedException ie)
-        {
-            ie.printStackTrace();
-        }
+
+        // try
+        // {
+        //     ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
+
+        //     for (int i = 10; i >= 0; i--)
+        //     {
+        //         oos.writeObject(i + " bottles of beer on the wall");
+        //         oos.flush();
+        //         Thread.sleep(1000);
+        //     }
+
+        //     clientSocket.close();
+        // } 
+        // catch (Exception e)
+        // {
+        //     e.printStackTrace();
+        // }
     }
 }
