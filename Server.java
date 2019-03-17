@@ -7,6 +7,7 @@ import java.io.*;
 public class Server extends Thread
 {
     Socket clientSocket;
+    static volatile int[] votes;
 
     Server(Socket clientSocket)
     {
@@ -18,6 +19,7 @@ public class Server extends Thread
         try
         {
             ServerSocket serverSocket = new ServerSocket(1717);
+            votes = new int[5];
             while (true)
             {
                 System.out.println("Waiting for connections on localhost:1717");
@@ -44,12 +46,23 @@ public class Server extends Thread
                 {
                     data = ois.readObject().toString();
                     System.out.println(data + " received from Thread " + this.getId());
+                    computeVote(Integer.parseInt(data));
                 }
             }
             catch (Exception e)
             {
                 clientSocket.close();
                 System.out.println(" -S- Conexao finalizada - Thread " + this.getId());
+
+                File results = new File("results.txt");
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(results));
+
+                for (int i = 0; i < votes.length; i++)
+                {
+                    bufferedWriter.write("Candidate " + i + " - " + votes[i] + "\n");
+                }
+
+                bufferedWriter.close();
                 // e.printStackTrace();
             }
         }
@@ -57,23 +70,10 @@ public class Server extends Thread
         {
             ioe.printStackTrace();
         }
+    }
 
-        // try
-        // {
-        //     ObjectOutputStream oos = new ObjectOutputStream(clientSocket.getOutputStream());
-
-        //     for (int i = 10; i >= 0; i--)
-        //     {
-        //         oos.writeObject(i + " bottles of beer on the wall");
-        //         oos.flush();
-        //         Thread.sleep(1000);
-        //     }
-
-        //     clientSocket.close();
-        // } 
-        // catch (Exception e)
-        // {
-        //     e.printStackTrace();
-        // }
+    public static synchronized void computeVote(int candidate) {
+        votes[candidate]++;
+        System.out.println("Candidate " + candidate + " - " + votes[candidate]);
     }
 }

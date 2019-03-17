@@ -7,6 +7,7 @@ public class Client {
             //ENDERECO DO SERVIDOR
             String IPServidor = "127.0.0.1";
             int PortaServidor = 1717;
+            String vote;
             
             //ESTABELECE CONEXAO COM SERVIDOR
             System.out.println(" -C- Conectando ao servidor ->" + IPServidor + ":" +PortaServidor);
@@ -15,32 +16,19 @@ public class Client {
             
             //CRIA UM PACOTE DE SAIDA PARA ENVIAR MENSAGENS, ASSOCIANDO-O A CONEXAO (c)
             ObjectOutputStream sCliOut = new ObjectOutputStream(sockCli.getOutputStream());
-            for (int i = 0; i < 10; i++) {
-                sCliOut.writeObject("MENSAGEM TESTE numero " + i);//ESCREVE NO PACOTE
+
+            File votes = new File(args[0]);
+            BufferedReader bufferedReader = new BufferedReader(new FileReader(votes));
+            
+            while ((vote = bufferedReader.readLine()) != null) {
+                sCliOut.writeObject(vote);//ESCREVE NO PACOTE
                 System.out.println(" -C- Enviando mensagem...");
                 sCliOut.flush(); //ENVIA O PACOTE
-                Thread.sleep(1500);
+                Thread.sleep(150);
             }
-            
-            //CRIA UM PACOTE DE ENTRADA PARA RECEBER MENSAGENS, ASSOCIADO A CONEXAO (c)
-            // ObjectInputStream sCliIn = new ObjectInputStream (sockCli.getInputStream());
-            // System.out.println(" -C- Recebendo mensagem...");
-            // try
-            // {
-            //     while (!sockCli.isClosed())
-            //     {
-            //         String strMsg = sCliIn.readObject().toString(); //ESPERA (BLOQUEADO) POR UM PACOTE
-            //         //PROCESSA O PACOTE RECEBIDO
-            //         System.out.println(" -C- Mensagem recebida: " + strMsg);
-            //     }
-            // }
-            // catch (EOFException eofe)
-            // {
-            //     //FINALIZA A CONEXAO
-            //     sockCli.close();
-            //     System.out.println(" -C- Conexao finalizada...");
-            //     // eofe.printStackTrace();
-            // }
+
+            bufferedReader.close();
+            sockCli.close();
             
         } catch(Exception e) {
             System.out.println(" -C- O seguinte problema ocorreu : \n" + e.toString());
