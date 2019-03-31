@@ -4,26 +4,27 @@ import java.io.*;
 public class Client {
     public static void main(String[] args) {
         try {
-            //ENDERECO DO SERVIDOR
+            //Endereco do servidor
             String IPServidor = "127.0.0.1";
             int PortaServidor = 1717;
             String vote;
             
-            //ESTABELECE CONEXAO COM SERVIDOR
+            //Estabelece uma conexao com o servidor
             System.out.println(" -C- Conectando ao servidor ->" + IPServidor + ":" +PortaServidor);
             Socket sockCli = new Socket (IPServidor,PortaServidor);
-            System.out.println(" -C- Detalhes conexao :" + sockCli.toString()); //DETALHAMENTO (EXTRA)
+            System.out.println(" -C- Detalhes conexao :" + sockCli.toString()); //Detalha melhor sobre a conexao
             
-            //CRIA UM PACOTE DE SAIDA PARA ENVIAR MENSAGENS, ASSOCIANDO-O A CONEXAO (c)
+            //Cria um pacote de saida para enviar mensagens, associando-a conexao(c)
             ObjectOutputStream sCliOut = new ObjectOutputStream(sockCli.getOutputStream());
 
+            //Le no arquivo os votos que um Cliente deseja computar
             File votes = new File(args[0]);
             BufferedReader bufferedReader = new BufferedReader(new FileReader(votes));
             
             while ((vote = bufferedReader.readLine()) != null) {
-                sCliOut.writeObject(vote);//ESCREVE NO PACOTE
+                sCliOut.writeObject(vote);//Escreve o voto no pacote
                 System.out.println(" -C- Enviando mensagem...");
-                sCliOut.flush(); //ENVIA O PACOTE
+                sCliOut.flush(); //Envia o pacote para o servidor
                 Thread.sleep(150);
             }
 

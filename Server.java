@@ -2,8 +2,6 @@ import java.net.Socket;
 import java.net.ServerSocket;
 import java.io.*;
 
-
-
 public class Server extends Thread
 {
     Socket clientSocket;
@@ -18,7 +16,9 @@ public class Server extends Thread
     {
         try
         {
+            //Abre uma conexao socket
             ServerSocket serverSocket = new ServerSocket(1717);
+            //Vetor para armazenar quantidade de votos para cada candidato
             votes = new int[5];
             while (true)
             {
@@ -39,6 +39,7 @@ public class Server extends Thread
         {
             try
             {
+                //Fluxo de entrada para receber os dados
                 ObjectInputStream ois = new ObjectInputStream(clientSocket.getInputStream());
                 String data;
     
@@ -57,6 +58,7 @@ public class Server extends Thread
                 File results = new File("results.txt");
                 BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(results));
 
+                //Computa os votos para cada candidato e escreve no arquivo results.txt
                 for (int i = 0; i < votes.length; i++)
                 {
                     bufferedWriter.write("Candidate " + i + " - " + votes[i] + "\n");
