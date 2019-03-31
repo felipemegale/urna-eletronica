@@ -18,8 +18,11 @@ public class Server extends Thread
         {
             //Abre uma conexao socket
             ServerSocket serverSocket = new ServerSocket(1717);
+
             //Vetor para armazenar quantidade de votos para cada candidato
             votes = new int[5];
+
+            //Enquanto existem conexões a serem realizadas, espera e cria-se novas threads
             while (true)
             {
                 System.out.println("Waiting for connections on localhost:1717");
@@ -74,6 +77,7 @@ public class Server extends Thread
         }
     }
 
+    // Recebe o numero do candidato como parametro e acrescenta um voto para o mesmo
     public static synchronized void computeVote(int candidate) {
         votes[candidate]++;
         System.out.println("Candidate " + candidate + " - " + votes[candidate]);
